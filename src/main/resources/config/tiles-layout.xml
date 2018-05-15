@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name=".wiartDefault" template="/WEB-INF/tiles/template/wiart.default.jsp">
+		<!-- <put-attribute name="js" value="/WEB-INF/tiles/attribute/wiart.javascript.jsp"></put-attribute> -->
+		<put-attribute name="header" value="/WEB-INF/tiles/attribute/wiart.header.jsp"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/tiles/template/wiart.body.jsp"></put-attribute>
+		<put-attribute name="footer" value="/WEB-INF/tiles/attribute/wiart.footer.jsp"></put-attribute>
+	</definition>
+	
+ 	<definition name="*/*" extends=".wiartDefault">
+		<put-attribute name="body" value="/WEB-INF/views/{1}/{2}./jsp"></put-attribute>
+	</definition>
+	<definition name="*/*" extends=".wiartDefault">
+		<put-attribute name="body" value="/WEB-INF/views/main/main.jsp" />
+	</definition>
+<!-- 	<definition name="*/*" extends=".wiartdefault">
+		<put-attribute name="body" value="/WEB-INF/views/main/main.jsp" />
+	</definition> -->
+</tiles-definitions>

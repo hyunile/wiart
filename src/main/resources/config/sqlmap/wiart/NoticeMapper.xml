@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hhi.wiart.notice.dao.NoticeMapper">
+
+	<select id="noticeList" statementType="CALLABLE" resultType="CustomMap">      
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.noticeList
+      Description : 공지사e
+      */          
+      SELECT
+	  	 (@ROWNUM := @ROWNUM + 1) rowNum
+	  	 ,no
+	     ,title
+	     ,content
+	     ,writer
+	     ,hit
+	     ,cre_dt
+	     ,rvse_dt	
+	  FROM
+	    notice ,
+        (SELECT @ROWNUM := 0) tmp
+      WHERE 1=1 
+      ORDER BY rowNum DESC              
+	  LIMIT #{pageNumber}, #{pageSize}   
+    </select>
+    
+    <select id="totalCount" statementType="CALLABLE" resultType="String">
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.totalCount
+      Description : totalCount
+      */      
+      SELECT
+	  	 COUNT(*) AS totalCount
+	  FROM
+	    notice
+	  WHERE 1=1
+    </select>
+    
+    <insert id="noticeInsert" statementType="CALLABLE" parameterType="hashmap">
+        /*
+        SQL ID:  com.hhi.wiart.notice.dao.NoticeMapper.noticeInsert
+        Description : 공지사등록
+        */
+        INSERT
+        	notice SET
+        title	= #{title}
+        ,content = #{content}
+        ,writer	= #{writer}
+        ,cre_dt	= sysdate()
+        ,rvse_dt = sysdate()
+    </insert>
+	<select id="noticeView" statementType="CALLABLE" resultType="CustomMap">      
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.noticeList
+      Description : 공지사e
+      */          
+      SELECT
+	  	 no
+	     ,title
+	     ,content
+	     ,writer
+	     ,hit
+	     ,cre_dt
+	     ,rvse_dt	
+	  FROM
+	    notice
+      WHERE 1=1
+      AND no = #{no}
+    </select>
+    
+    <update id="noticeHitCnt" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.noticeHitCnt
+      Description : 공지사항 조회수 증가
+      */
+      UPDATE notice
+      SET
+      	hit = IFNULL(hit, 0)+1
+      WHERE
+      	no = #{no}
+    </update>
+    
+    <update id="noticeUpdate" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.noticeUpdate
+      Description : 공지사항 수정
+      */
+      UPDATE notice
+      SET
+      	content = #{content}
+       ,title = #{title}
+      WHERE no = #{no}
+    </update>
+    
+    <delete id="noticeDelete" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.notice.dao.NoticeMapper.noticeDelete
+      Description : 공지사항 삭제
+      */
+      DELETE 
+      FROM notice
+      WHERE no = #{no}
+    </delete>
+</mapper>

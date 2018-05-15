@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd           
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- SqlSession setup for MyBatis Database Layer -->
+    <bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
+    
+    <!-- 운영시에는 이걸로 변경할것  RefreshableSqlSessionFactoryBean : xml변경시 자동 reloading 되는 기능 
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+    -->
+    <!-- <bean id="sqlSession" class="com.kepco.apiadmin.common.mapper.RefreshableSqlSessionFactoryBean"> -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+        <property name="dataSource" ref="dataSource-${Globals.DbType}" />
+        <property name="configLocation" value="classpath:/config/sqlmap/mapper-config.xml" />
+        <property name="mapperLocations" value="classpath:/config/sqlmap/wiart/*.xml" />
+    </bean>
+    
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSession" />
+    </bean>
+    <!-- scan for mappers and let them be autowired -->
+ 
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hhi.wiart.**.dao" />
+    </bean>
+
+</beans>	

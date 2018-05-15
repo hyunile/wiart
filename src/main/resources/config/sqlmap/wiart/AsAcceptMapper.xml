@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hhi.wiart.asAccept.dao.AsAcceptMapper">
+
+	<select id="asAcceptList" statementType="CALLABLE" resultType="CustomMap">      
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptList
+      Description : as접수
+      */          
+      SELECT
+	  	 (@ROWNUM := @ROWNUM + 1) rowNum
+	  	 ,no
+	  	 ,customerno
+	  	 ,writer
+	  	 ,address
+	  	 ,phone
+	  	 ,title
+	  	 ,content
+	  	 ,hit
+	  	 ,cre_dt
+	  	 ,filepath
+	  FROM
+	    asaccept ,
+        (SELECT @ROWNUM := 0) tmp
+      WHERE 1=1 
+      ORDER BY rowNum DESC              
+	  LIMIT #{pageNumber}, #{pageSize}   
+    </select>
+    
+    <select id="totalCount" statementType="CALLABLE" resultType="String">
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.totalCount
+      Description : totalCount
+      */      
+      SELECT
+	  	 COUNT(*) AS totalCount
+	  FROM
+	    asaccept
+	  WHERE 1=1
+    </select>
+    
+    <insert id="asAcceptInsert" statementType="CALLABLE" parameterType="hashmap">
+        /*
+        SQL ID:  com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptInsert
+        Description : as접수등록
+        */
+        INSERT
+        	asaccept SET
+        title	= #{title}
+        ,content = #{content}
+        ,writer	= #{writer}
+        ,cre_dt	= sysdate()
+        ,rvse_dt = sysdate()
+    </insert>
+	<select id="asAcceptView" statementType="CALLABLE" resultType="CustomMap">      
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptList
+      Description : a/s 접수 상세
+      */          
+      SELECT
+	  	 no
+	  	 ,customerno
+	  	 ,writer
+	  	 ,address
+	  	 ,phone
+	  	 ,title
+	  	 ,content
+	  	 ,hit
+	  	 ,cre_dt
+	  	 ,filepath
+	  FROM
+	    asaccept
+      WHERE 1=1
+      AND no = #{no}
+    </select>
+    
+    <update id="asAcceptHitCnt" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptHitCnt
+      Description : a/s접수 조회수 증가
+      */
+      UPDATE asaccept
+      SET
+      	hit = IFNULL(hit, 0)+1
+      WHERE
+      	no = #{no}
+    </update>
+    
+    <update id="asAcceptUpdate" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptUpdate
+      Description : a/s접수 수정
+      */
+      UPDATE asaccept
+      SET
+      	content = #{content}
+       ,title = #{title}
+      WHERE no = #{no}
+    </update>
+    
+    <delete id="asAcceptDelete" parameterType="hashmap">
+      /*
+      SQL ID: com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptDelete
+      Description : a/s접수 삭제
+      */
+      DELETE 
+      FROM asaccept
+      WHERE no = #{no}
+    </delete>
+
+    <insert id="asAcceptAddFile" statementType="CALLABLE" parameterType="String">
+        /*
+        SQL ID:  com.hhi.wiart.asAccept.dao.asAcceptMapper.asAcceptAddFile
+        Description : as 파일등록
+        */
+        INSERT INTO asaccept_file (
+        	file_name
+        	,no
+        )VALUE(
+        	#{fileName}
+        	, LAST_INSERT_ID()
+        )
+    </insert>    
+</mapper>

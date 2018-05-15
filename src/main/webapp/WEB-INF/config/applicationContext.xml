@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"		
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+				http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <!-- component-scan 설정-->
+	<context:component-scan base-package="com.hhi.wiart"/>
+<!--         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+    
+
+	<!-- 환경설정 기본정보를 globals.properties 에서 참조하도록 propertyConfigurer 설정  -->
+	<bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/config/globals.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- datasource 설정(propertyConfigurer 활용) -->
+    <alias name="dataSource-${Globals.DbType}" alias="dataSource" />
+    
+	<!-- MySql -->
+	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${Globals.DriverClassName}"/>
+        <property name="url" value="${Globals.Url}" />
+        <property name="username" value="${Globals.UserName}"/>
+        <property name="password" value="${Globals.Password}"/>
+        <!--  TEST -->
+        <!-- 
+        <property name="initialSize" value="10" />
+        <property name="maxActive" value="100"/>
+        <property name="validationQuery" value="select 1"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="120000"/>
+         -->
+    </bean>
+    
+    <!-- SqlSessionFactory 설정 : dataSource를 참조, mapper-config.xml 경로설정 -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+        <property name="dataSource" ref="dataSource-${Globals.DbType}" />
+        <property name="configLocation" value="classpath:/config/mapper-config.xml" />
+        <property name="mapperLocations" value="classpath:/config/sqlmap/wiart/*.xml" />
+    </bean>
+    
+    <!-- destroy-method="clearCache" : tomcat 서버 종료시 WARNING이 발생하지 않는다. -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+        <constructor-arg ref="sqlSession" />
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hhi.wiart.**.dao" />
+    </bean>
+
+	<!-- 파일업로드에 필요한 bean -->
+<!--     <bean id="spring.RegularCommonsMultipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+	
+	<alias name="spring.RegularCommonsMultipartResolver" alias="multipartResolver" />
+	 -->
+	<!-- 파일업로드를 위한 디렉토리 설정 -->
+	<!-- String uploadPath = new String("업로드 경로") -->
+	<bean id="uploadPath" class="java.lang.String">
+	    <!-- 파일업로드 디렉토리-->
+	    <constructor-arg value="C:/data/nas"/>
+	</bean>    
+    
+    <!-- 태그 사용 -->
+    <!-- <util:properties id="fileProperties" location="classpath:/config/application-file.properties" /> 
+    <util:properties id="soapProperties" location="classpath:/config/application-soap.properties" />     -->
+</beans>
