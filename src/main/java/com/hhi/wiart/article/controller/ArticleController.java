@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,13 +46,23 @@ public class ArticleController {
         this.articleService = articleService;
     }
     
-    @RequestMapping(value = "/listPaging", method = RequestMethod.GET)
+    /**
+     
+	페이지 번호 출력처리를 위한 데이터들 : 시작 페이지 번호, 끝 페이지 번호, 전체 게시글의 갯수, 이전 링크, 다음 링크
+	끝 페이지 번호 계산식 : Math.ceil(현재 페이지 번호 / 페이지 번호의 갯수) * 페이지번호의 갯수
+	시작 페이지 번호 계산식 : (끝 페이지 번호 - 페이지 번호의 갯수) + 1
+	끝 페이지 번호의 보정 계산식 : Math.ceil(전체 게시글의 갯수 / 페이지 당 출력할 게시글의 갯수)
+	이전 링크 활성/비활성 계산식 : 시작 페이지 번호 == 1 ? fales : true
+	다음 링크 활성/비활성 계산식 : 끝 페이지 번호 * 페이지 당 출력할 게시글 갯수 >= 전체 게시글의 갯수 ? fales : true
+
+     */
+    @RequestMapping(value = "/article/listPaging", method = RequestMethod.GET)
     public String listPaging(Model model, Criteria criteria) throws Exception {
         logger.info("listPaging ...");
 
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCriteria(criteria);
-        pageMaker.setTotalCount(1000);
+        pageMaker.setTotalCount(articleService.countArticles(criteria));
 
         model.addAttribute("articles", articleService.listCriteria(criteria));
         model.addAttribute("pageMaker", pageMaker);
@@ -59,6 +70,55 @@ public class ArticleController {
         return "/article/list_paging";
     }
     
+    @RequestMapping(value = "/article/readPaging", method = RequestMethod.GET)
+    public String readPaing(@RequestParam("articleNo") int articleNo,
+    						@ModelAttribute("crteria") Criteria criteria,
+    						Model model) throws Exception {
+    	
+    	model.addAttribute("article", articleService.read(articleNo));
+    	
+    	return "/article/read_paging";
+    } 	
+    
+    @RequestMapping(value = "/modifyPaging", method = RequestMethod.GET)
+    public String modifyGETPaging(@RequestParam("articleNo") int articleNo,
+                                  @ModelAttribute("criteria") Criteria criteria,
+                                  Model model) throws Exception {
+
+        logger.info("modifyGetPaging ...");
+        model.addAttribute("article", articleService.read(articleNo));
+
+        return "/article/modify_paging";
+    }
+    
+    @RequestMapping(value = "/modifyPaging", method = RequestMethod.POST)
+    public String modifyPOSTPaging(ArticleVO articleVO,
+                                   Criteria criteria,
+                                   RedirectAttributes redirectAttributes) throws Exception {
+
+        logger.info("modifyPOSTPaging ...");
+        articleService.update(articleVO);
+        redirectAttributes.addAttribute("page", criteria.getPage());
+        redirectAttributes.addAttribute("perPageNum", criteria.getPerPageNum());
+        redirectAttributes.addFlashAttribute("msg", "modSuccess");
+
+        return "redirect:/article/listPaging";
+    }
+    
+    @RequestMapping(value = "/removePaging", method = RequestMethod.POST)
+    public String removePaging(@RequestParam("articleNo") int articleNo,
+                               Criteria criteria,
+                               RedirectAttributes redirectAttributes) throws Exception {
+
+        logger.info("remove ...");
+        articleService.delete(articleNo);
+        redirectAttributes.addAttribute("page", criteria.getPage());
+        redirectAttributes.addAttribute("perPageNum", criteria.getPerPageNum());
+        redirectAttributes.addFlashAttribute("msg", "delSuccess");
+
+        return "redirect:/article/listPaging";
+    }
+    ///////// old version begin ////////
     @RequestMapping(value = "/article/listCriteria", method = RequestMethod.GET)
     public String listCriteria(Model model, Criteria criteria) throws Exception {
         logger.info("listCriteria ...");
