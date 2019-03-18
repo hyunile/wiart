@@ -38,4 +38,8 @@ public interface ArticleService {
     List<ArticleVO> listPaging(int page) throws Exception;
     
     List<ArticleVO> listCriteria(Criteria criteria) throws Exception;
+    
+   void addFile(String fullName) throws Exception;
+   
+   public int countArticles(Criteria criteria) throws Exception;
 }

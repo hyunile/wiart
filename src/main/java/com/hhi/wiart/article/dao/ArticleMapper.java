@@ -40,4 +40,9 @@ public interface ArticleMapper {
     List<ArticleVO> listPaging(int page);
     
     List<ArticleVO> listCriteria(Criteria criteria) throws Exception;
+    
+    int countArticles(Criteria criteria) throws Exception;
+    
+    // 파일 추
+    void addFile(String fullName) throws Exception;
 }

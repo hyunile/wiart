@@ -16,7 +16,7 @@ public class companyController {
 	public String greet( Model model) {
 		
 		System.out.println("▶▶▶▶▶▶▶▶▶▶▶▶ 회사소개>인사말");
-		
+
 		return "/company/greet";
 	}
 	
@@ -24,7 +24,6 @@ public class companyController {
 	public String intro(Model model){
 		System.out.println("▶▶▶▶▶▶▶▶▶▶▶▶ 회사소개>회사소개");
 
-		
 		return "/company/intro";
 	}
 

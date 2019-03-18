@@ -3,20 +3,6 @@
  */
 package com.hhi.wiart.article;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import com.hhi.wiart.article.dao.ArticleMapper;
-import com.hhi.wiart.article.model.ArticleVO;
-import com.hhi.wiart.common.paging.Criteria;
 /**
  * <PRE>
  * 1. ClassName: ArticleDAOTest
@@ -32,28 +18,28 @@ import com.hhi.wiart.common.paging.Criteria;
  * </PRE>
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/applicationContext.xml"})
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/config/applicationContext.xml"})
 public class ArticleDAOTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(ArticleDAOTest.class);
-
-    @Inject
-    private ArticleMapper articleMapper;
-    
-    @Test
-    public void testListCriteria() throws Exception {
-        Criteria criteria = new Criteria();
-        criteria.setPage(3);
-        criteria.setPerPageNum(20);
-
-        List<ArticleVO> articles = articleMapper.listCriteria(criteria);
-
-        for (ArticleVO article : articles) {
-            logger.info(article.getArticleNo() + " : " + article.getTitle());
-        }
-    }
-    
+//
+//    private static final Logger logger = LoggerFactory.getLogger(ArticleDAOTest.class);
+//
+//    @Inject
+//    private ArticleMapper articleMapper;
+//    
+//    @Test
+//    public void testListCriteria() throws Exception {
+//        Criteria criteria = new Criteria();
+//        criteria.setPage(3);
+//        criteria.setPerPageNum(20);
+//
+//        List<ArticleVO> articles = articleMapper.listCriteria(criteria);
+//
+//        for (ArticleVO article : articles) {
+//            logger.info(article.getArticleNo() + " : " + article.getTitle());
+//        }
+//    }
+//    
 /*    
     @Test
     public void testListPaging() throws Exception {

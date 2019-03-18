@@ -62,7 +62,23 @@
 			</div>
 		<button type="button" class="btn btn-default pull-right" id="btnWrite">등록</button>		
 		</div>
-	
+<div class="box-footer">
+    <div class="text-center">
+        <ul class="pagination">
+            <c:if test="${pageMaker.prev}">
+                <li><a href="${path}/article/listPaging?page=${pageMaker.startPage - 1}">이전</a></li>
+            </c:if>
+            <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+                <li <c:out value="${pageMaker.criteria.page == idx ? 'class=active' : ''}"/>>
+                    <a href="${path}/article/listPaging?page=${idx}">${idx}</a>
+                </li>
+            </c:forEach>
+            <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+                <li><a href="${path}/article/listPaging?page=${pageMaker.endPage + 1}">다음</a></li>
+            </c:if>
+        </ul>
+    </div>
+</div>
 	      <input type="hidden" name="totalCount" id="totalCount" />
 	      <input type="hidden" name="page" id="page" />
 	      <input type="hidden" name="pageSize" id="pageSize" />		

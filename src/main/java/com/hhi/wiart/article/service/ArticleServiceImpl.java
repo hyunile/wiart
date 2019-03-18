@@ -73,6 +73,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
     
     @Override
+    public int countArticles(Criteria criteria) throws Exception {
+        return articleMapper.countArticles(criteria);
+    }
+    
+    @Override
     public List<ArticleVO> listPaging(int page) throws Exception{
     	// 0보다 작은 음수값 막음
     	if(page <= 0){
@@ -81,5 +86,10 @@ public class ArticleServiceImpl implements ArticleService {
     	
     	page = (page - 1) * 10;
     	return articleMapper.listPaging(page);
+    }
+    
+    @Override
+    public void addFile(String fileName) throws Exception {
+    	articleMapper.addFile(fileName);
     }
 }

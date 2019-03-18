@@ -7,6 +7,7 @@
 	
 <script type="text/javascript">
 	function makeform(ActionURL) {
+		alert(ActionURL);
 		var f = document.menuHandle;
 		f.action=ActionURL;
 		//f.method="post";
@@ -132,7 +133,7 @@
 	                <li class="dropdown">
 	                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">제품소개</a>
 	                     <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
-	                        <li><a href="#" onclick="goMenuPage('/introItem/list?type=1')">싱크대<span class="label label-success pull-right">New</span></a></li>
+	                        <li><a href="#" onclick="goMenuPage('/introItem/sink')">싱크대<span class="label label-success pull-right">New</span></a></li>
 	                        <li><a href="#" onclick="goMenuPage('/introItem/list?type=2')">붙박이장</a></li>
 	                        <li><a href="#" onclick="goMenuPage('/introItem/list?type=3')">상판</a></li>
 	                        <li><a href="#" onclick="goMenuPage('/introItem/list2?type=4')">빌트인</a></li>
@@ -152,7 +153,7 @@
 	                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">공지사항</a>
 	                     <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
 	                        <li><a href="#" onclick="goMenuPage('/notice/list');">공지사항</a></li>
-	                        <li><a href="#" onclick="goMenuPage('/article/list');">이벤트test</a></li>
+	                        <li><a href="#" onclick="goMenuPage('/article/listPaging');">이벤트test</a></li>
 	                        <li><a href="#" onclick="goMenuPage('/asAccept/list');">A/S접수</a></li>
 	                    </ul>
 	                </li>

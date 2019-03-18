@@ -15,7 +15,7 @@ public class IntroItemController {
 	
 //	@Autowired
 //	private IntroItemService introItemService;
-	
+
 	@RequestMapping(value = "/introItem/list")
 	public String introList(@RequestParam String type, Model model)throws Exception{
 		log.debug(">>>>>>>>>>> introItem list : {}", type );
